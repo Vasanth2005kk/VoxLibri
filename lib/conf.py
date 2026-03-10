@@ -55,9 +55,8 @@ os.environ['CUDA_CACHE_MAXSIZE'] = '2147483648'
 os.environ['SUNO_OFFLOAD_CPU'] = 'False'
 os.environ['SUNO_USE_SMALL_MODELS'] = 'False'
 # ---------------------------------------------------------------------
-# Version and runtime config
+# runtime config
 # ---------------------------------------------------------------------
-prog_version = (lambda: open('VERSION.txt').read().strip())()
 max_upload_size = '6GB'
 
 NATIVE = 'native'
@@ -92,8 +91,6 @@ devices = {
 
 default_device = devices['CPU']['proc']
 default_chapters_preview = False
-
-default_gpu_wiki = '<a href="https://github.com/DrewThomasson/ebook2audiobook/wiki/GPU-ISSUES">GPU howto wiki</a>'
 
 default_py_major = sys.version_info.major
 default_py_minor = sys.version_info.minor

@@ -8,8 +8,7 @@ from lib import (
     # from conf.py
     min_python_version, max_python_version, default_device, devices,
     default_output_format, default_output_channel, audiobooks_cli_dir,
-    interface_port, interface_host, NATIVE, prog_version,
-    default_output_split, default_output_split_hours, ebook_formats,
+    interface_port, interface_host, NATIVE, default_output_split, default_output_split_hours, ebook_formats,
     # from conf_lang.py
     default_language_code, install_info,
     # from conf_models.py
@@ -154,8 +153,7 @@ SML tags available:
     headless_optional_group.add_argument(options[23], type=float, default=default_engine_settings[TTS_ENGINES['BARK']]['waveform_temp'], help=f"""(bark only, optional) Waveform Temperature for the model. 
     Default to config.json model.""")
     headless_optional_group.add_argument(options[24], type=str, help=f'''(Optional) Path to the output directory. Default is set in ./lib/conf.py''')
-    headless_optional_group.add_argument(options[25], action='version', version=f'ebook2audiobook version {prog_version}', help='''Show the version of the script and exit''')
-    headless_optional_group.add_argument(options[26], action='store_true', help=argparse.SUPPRESS)
+    headless_optional_group.add_argument(options[25], action='store_true', help=argparse.SUPPRESS)
     
     for arg in sys.argv:
         if arg.startswith('--') and arg not in options:
@@ -181,8 +179,6 @@ SML tags available:
         args['script_mode'] = args['script_mode'] if args['script_mode'] else NATIVE
         args['share'] =  args['share'] if args['share'] else False
         args['ebook_list'] = None
-
-        print(f"v{prog_version} {args['script_mode']} mode")
         
         if args['script_mode'] in [NATIVE]:
             from lib.classes.device_installer import DeviceInstaller

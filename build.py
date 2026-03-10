@@ -11,9 +11,8 @@ from pathlib import Path
 
 
 # --- Configuration ---
-APP_NAME = "ebook2audiobook"
+APP_NAME = "VoxLibri"
 SCRIPT_DIR = Path(__file__).parent.absolute()
-VERSION_FILE = SCRIPT_DIR / "VERSION.txt"
 REQUIREMENTS_FILE = SCRIPT_DIR / "requirements.txt"
 PYTHON_ENV_DIR = SCRIPT_DIR / "python_env"
 INSTALLED_LOG = SCRIPT_DIR / ".installed"
@@ -37,9 +36,6 @@ os.environ["PYTHONIOENCODING"] = "utf-8"
 os.environ["TTS_CACHE"] = str(MODELS_DIR)
 os.environ["TESSDATA_PREFIX"] = str(TESSDATA_PREFIX)
 os.environ["TMPDIR"] = str(TMP_DIR)
-
-if VERSION_FILE.exists():
-    os.environ["APP_VERSION"] = VERSION_FILE.read_text().strip()
 
 CONDA_HOME = Path.home() / "Miniforge3"
 CONDA_BIN = CONDA_HOME / "bin"
@@ -138,10 +134,12 @@ def check_programs(programs):
     missing = []
     for prog in programs:
         bin_name = prog
-        if prog == "nodejs": bin_name = "node"
-        if prog == "rustc": bin_name = "rustc"
-        if prog == "cargo": bin_name = "cargo"
-        
+        if prog == "nodejs":
+            bin_name = "node"
+        if prog == "rustc":
+            bin_name = "rustc"
+        if prog == "cargo":
+            bin_name = "cargo"
         if prog == "xcb-util-cursor":
             # Check shared library as in bash script
             try:
@@ -262,7 +260,7 @@ def check_sitecustomize():
         shutil.copy2(src, dst)
 
 def main():
-    parser = argparse.ArgumentParser(description="ebook2audiobook Build and Run Script")
+    parser = argparse.ArgumentParser(description="Voxlibri Build and Run Script")
     parser.add_argument("--headless", action="store_true", help="Run in headless mode")
     parser.add_argument("--help-app", action="store_true", help="Show help from app.py")
     args, unknown = parser.parse_known_args()
@@ -311,12 +309,11 @@ def main():
         cmd.extend(unknown)
         if args.headless:
             cmd.append("--headless")
-
-    print_green("Starting ebook2audiobook...")
+    print_green("Starting VoxLibri...")
     try:
         subprocess.run(cmd)
     except KeyboardInterrupt:
-        print("\nExiting...")
+        print_red("\nExiting...")
 
 if __name__ == "__main__":
     main()

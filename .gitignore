@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -226,4 +225,4 @@ Audiobooks/*
 .installed
 tmp/*
 models/*
->>>>>>> master
+chacking.*
