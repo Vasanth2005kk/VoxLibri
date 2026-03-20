@@ -112,7 +112,7 @@ def setup_desktop_app():
     menu_entry.parent.mkdir(parents=True, exist_ok=True)
     content = f"""[Desktop Entry]
 Type=Application
-Name=ebook2audiobook
+Name=VoxLibrik
 Exec={SCRIPT_DIR}/build.py
 Icon={icon_path}
 Terminal=true
@@ -295,8 +295,8 @@ def main():
     check_sitecustomize()
 
     # Desktop app shortcut
-    if not args.headless:
-        setup_desktop_app()
+    # if not args.headless:
+    #     setup_desktop_app()
 
     # Run the app
     python_bin = PYTHON_ENV_DIR / "bin" / "python"

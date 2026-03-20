@@ -2,7 +2,7 @@ import os
 
 install_info = r'''
 After the first run, you are free to use your command line with:
-# go into ebook2audiobook folder then:
+# go into Voxlibir folder then:
 ----------------------------------
 conda activate ./python_env
 python app.py [options]
