@@ -35,7 +35,6 @@ os.environ['HUGGINGFACE_HUB_CACHE'] = tts_dir
 os.environ['HF_HOME'] = tts_dir
 os.environ['HF_DATASETS_CACHE'] = tts_dir
 os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
-os.environ['BARK_CACHE_DIR'] = tts_dir
 os.environ['TTS_CACHE'] = tts_dir
 os.environ['TORCH_HOME'] = tts_dir
 os.environ['TTS_HOME'] = models_dir

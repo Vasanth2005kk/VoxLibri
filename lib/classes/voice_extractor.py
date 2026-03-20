@@ -197,7 +197,7 @@ class VoiceExtractor:
                 min_silence_len = min_silence_len
             )
             total_duration = len(audio)
-            min_required_duration = 20000 if self.session["tts_engine"] == TTS_ENGINES["BARK"] else 12000
+            min_required_duration = 12000
             msg = "Removing long pauses..."
             print(msg)
             if self.is_gui_process:

@@ -206,10 +206,7 @@ with st.sidebar:
         xtts_num_beams   = st.slider("Num Beams",        1,    10,   int(xtts_cfg.get("num_beams", 1)),          1,    key="xtts_num_beams")
         xtts_text_split  = st.checkbox("Enable Text Splitting", value=bool(xtts_cfg.get("enable_text_splitting", True)), key="xtts_split")
 
-    with st.expander("🌲 Bark Advanced Settings", expanded=False):
-        bark_cfg = default_engine_settings.get(TTS_ENGINES.get("BARK", "bark"), {})
-        bark_text_temp     = st.slider("Text Temperature",     0.0, 1.0, float(bark_cfg.get("text_temp",     0.7)), 0.01, key="bark_tt")
-        bark_waveform_temp = st.slider("Waveform Temperature", 0.0, 1.0, float(bark_cfg.get("waveform_temp", 0.7)), 0.01, key="bark_wt")
+
 
     st.divider()
     st.markdown(
@@ -458,9 +455,7 @@ def _run_conversion(args: dict, log_q: queue.Queue, done_event: threading.Event)
             session["xtts_num_beams"]         = args.get("xtts_num_beams", 1)
             session["xtts_enable_text_splitting"] = args.get("xtts_enable_text_splitting", True)
 
-            # Bark params
-            session["bark_text_temp"]     = args.get("bark_text_temp", 0.7)
-            session["bark_waveform_temp"] = args.get("bark_waveform_temp", 0.7)
+
 
             if args.get("ebook_list"):
                 msg, ok = convert_ebook_batch({
@@ -532,9 +527,7 @@ if convert_clicked and not is_running:
             "xtts_length_penalty": xtts_length_penalty,
             "xtts_num_beams":    xtts_num_beams,
             "xtts_enable_text_splitting": xtts_text_split,
-            # Bark params
-            "bark_text_temp":    bark_text_temp,
-            "bark_waveform_temp": bark_waveform_temp,
+
         }
 
         lq = queue.Queue()
@@ -638,7 +631,7 @@ Convert eBooks into high-quality audiobooks using state-of-the-art TTS engines.
 - **English & Tamil** language support
 - **CPU & GPU** processing (CUDA, ROCm, XPU, Jetson)
 - **Voice cloning** — use your own voice sample
-- **Multiple TTS engines** — XTTSv2, Bark, Fairseq, VITS, and more
+- **Multiple TTS engines** — XTTSv2 and Fairseq
 - **Multiple output formats** — M4B, MP3, FLAC, OGG, WAV, and more
 - **Linux native** — no Docker, no Windows dependencies
 
@@ -646,9 +639,7 @@ Convert eBooks into high-quality audiobooks using state-of-the-art TTS engines.
 | Engine | Tamil | Voice Clone | Quality |
 |--------|-------|-------------|---------|
 | **XTTSv2** | ✅ | ✅ | ⭐⭐⭐⭐⭐ |
-| **Bark** | ✅ | ❌ | ⭐⭐⭐⭐ |
 | **Fairseq** | ✅ | ❌ | ⭐⭐⭐ |
-| **VITS** | ❌ | ❌ | ⭐⭐⭐ |
 
 ### 🚀 Usage
 ```bash

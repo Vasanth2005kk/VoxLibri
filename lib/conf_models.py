@@ -6,13 +6,7 @@ xtts_builtin_speakers_list = {}
 
 TTS_ENGINES = {
     "XTTSv2": "xtts",
-    "BARK": "bark",
-    "TORTOISE": "tortoise",
-    "VITS": "vits",
-    "FAIRSEQ": "fairseq",
-    "GLOWTTS": "glowtts",
-    "TACOTRON2": "tacotron",
-    "YOURTTS": "yourtts"
+    "FAIRSEQ": "fairseq"
 }
 
 TTS_VOICE_CONVERSION = {
@@ -59,16 +53,12 @@ default_engine_settings = {
         "languages": {"eng": "en"},
         "samplerate": 24000,
         "temperature": 0.75,
-        #"codec_temperature": 0.3,
         "length_penalty": 1.0,
         "num_beams": 1,
         "repetition_penalty": 2.0,
-        #"cvvp_weight": 0.3,
         "top_k": 40,
         "top_p": 0.95,
         "speed": 1.0,
-        #"gpt_cond_len": 512,
-        #"gpt_batch_size": 1,
         "enable_text_splitting": False,
         "files": ['config.json', 'model.pth', 'vocab.json', 'ref.wav'],
         "voices": {
@@ -95,57 +85,11 @@ default_engine_settings = {
         },
         "rating": {"VRAM": 4, "CPU": 2, "RAM": 4, "Realism": 5}
     },
-    TTS_ENGINES['BARK']: {
-        "languages": {"eng": "en"},
-        "samplerate": 24000,
-        "text_temp": 0.22,
-        "waveform_temp": 0.44,
-        "files": ["text_2.pt", "coarse_2.pt", "fine_2.pt"],
-        "speakers_path": os.path.join(voices_dir, '__bark'),
-        "voices": {
-            "en_speaker_0": "Speaker 0", "en_speaker_1": "Speaker 1", "en_speaker_2": "Speaker 2", "en_speaker_3": "Speaker 3", "en_speaker_4": "Speaker 4", "en_speaker_5": "Speaker 5", "en_speaker_6": "Speaker 6", "en_speaker_7": "Speaker 7", "en_speaker_8": "Speaker 8", "en_speaker_9": "Speaker 9"
-        },
-        "rating": {"VRAM": 6, "CPU": 1, "RAM": 6, "Realism": 4}
-    },
-    TTS_ENGINES['TORTOISE']: {
-        "languages": {"eng": "en"},
-        "samplerate": 24000,
-        "files": ['config.json', 'best_model.pth', 'vocoder_config.json', 'vocoder_model.pth'],
-        "voices": {},
-        "rating": {"VRAM": 3, "CPU": 2, "RAM": 4, "Realism": 4}
-    },
-    TTS_ENGINES['VITS']: {
-        "languages": {"eng": "en"},
-        "samplerate": 22050,
-        "files": ['autoregressive.pth ', 'diffusion_decoder.pth', 'vocoder.pth', 'clvp2.pth'],
-        "voices": {},
-        "rating": {"VRAM": 2, "CPU": 4, "RAM": 4, "Realism": 4}
-    },
     TTS_ENGINES['FAIRSEQ']: {
         "languages": {"eng": "en", "tam": "ta"},
         "samplerate": 16000,
         "files": ['config.json', 'G_100000.pth', 'vocab.json'],
         "voices": {},
         "rating": {"VRAM": 2, "CPU": 4, "RAM": 4, "Realism": 4}
-    },
-    TTS_ENGINES['GLOWTTS']: {
-        "languages": {"eng": "en"},
-        "samplerate": 22050,
-        "files": ['config.json', 'best_model.pth', 'vocoder_config.json', 'vocoder_model.pth'],
-        "voices": {},
-        "rating": {"VRAM": 1, "CPU": 4, "RAM": 2, "Realism": 3}
-    },
-    TTS_ENGINES['TACOTRON2']: {
-        "languages": {"eng": "en"},
-        "samplerate": 22050,
-        "files": ['config.json', 'model_file.pth', 'vocoder_config'],
-        "rating": {"VRAM": 1, "CPU": 5, "RAM": 2, "Realism": 3}
-    },
-    TTS_ENGINES['YOURTTS']: {
-        "languages": {"eng": "en"},
-        "samplerate": 16000,
-        "files": ['config.json', 'model_file.pth'],
-        "voices": {"Machinella-5": "female-en-5", "ElectroMale-2": "male-en-2"},
-        "rating": {"VRAM": 1, "CPU": 5, "RAM": 1, "Realism": 2}
     }
 }

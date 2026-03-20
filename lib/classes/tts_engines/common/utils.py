@@ -262,7 +262,7 @@ class TTSUtils:
             import numpy as np
             from huggingface_hub import hf_hub_download
             voice_parts = Path(current_voice).parts
-            if (self.session['language'] in voice_parts or speaker in default_engine_settings[TTS_ENGINES['BARK']]['voices'] or self.session['language'] == 'eng'):
+            if (self.session['language'] in voice_parts or self.session['language'] == 'eng'):
                 return current_voice
             xtts = TTS_ENGINES['XTTSv2']
             if self.session['language'] in default_engine_settings[xtts].get('languages', {}):
@@ -421,7 +421,7 @@ class TTSUtils:
         )
         if self.params['current_voice'] is not None:
             self.speaker = re.sub(r'\.wav$', '', os.path.basename(self.params['current_voice']))
-            if self.params['current_voice'] not in default_engine_settings[TTS_ENGINES['BARK']]['voices'].keys() and self.session['custom_model_dir'] not in self.params['current_voice']:
+            if self.session['custom_model_dir'] not in self.params['current_voice']:
                 self.session['voice'] = self.params['current_voice'] = self._check_xtts_builtin_speakers(self.params['current_voice'], self.speaker)
                 if not self.params['current_voice']:
                     msg = f"_set_voice() error: Could not create the builtin speaker selected voice in {self.session['language']}"

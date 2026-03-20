@@ -179,8 +179,6 @@ class SessionContext:
             #"xtts_gpt_cond_len": default_engine_settings[TTS_ENGINES['XTTSv2']]['gpt_cond_len'],
             #"xtts_gpt_batch_size": default_engine_settings[TTS_ENGINES['XTTSv2']]['gpt_batch_size'],
             "xtts_enable_text_splitting": default_engine_settings[TTS_ENGINES['XTTSv2']]['enable_text_splitting'],
-            "bark_text_temp": default_engine_settings[TTS_ENGINES['BARK']]['text_temp'],
-            "bark_waveform_temp": default_engine_settings[TTS_ENGINES['BARK']]['waveform_temp'],
             "final_name": None,
             "output_format": default_output_format,
             "output_channel": default_output_channel,
@@ -2572,8 +2570,6 @@ def convert_ebook(args:dict)->tuple:
                 session['xtts_top_p'] = float(args['xtts_top_p'])
                 session['xtts_speed'] = float(args['xtts_speed'])
                 session['xtts_enable_text_splitting'] = bool(args['xtts_enable_text_splitting'])
-                session['bark_text_temp'] =  float(args['bark_text_temp'])
-                session['bark_waveform_temp'] =  float(args['bark_waveform_temp'])
                 session['audiobooks_dir'] = str(args['audiobooks_dir']) if args['audiobooks_dir'] else None
                 session['output_format'] = str(args['output_format'])
                 session['output_channel'] = str(args['output_channel'])
@@ -2645,9 +2641,6 @@ def convert_ebook(args:dict)->tuple:
                                 msg_extra += '<br/>Memory capacity not detected! restrict to 1GB max' if session['free_vram_gb'] == 0 else f"<br/>Memory detected with {session['free_vram_gb']}GB"
                             else:
                                 msg_extra += f"<br/>Free Memory available: {session['free_vram_gb']}GB"
-                                if session['free_vram_gb'] > 4.0:
-                                    if session['tts_engine'] == TTS_ENGINES['BARK']:
-                                        os.environ['SUNO_USE_SMALL_MODELS'] = 'False'                        
                             if session['device'] == devices['CUDA']['proc'] or session['device'] == devices['JETSON']['proc']:
                                 if not devices['CUDA']['found']:
                                     session['device'] = devices['CPU']['proc']
@@ -2664,14 +2657,6 @@ def convert_ebook(args:dict)->tuple:
                                 if not devices['XPU']['found']:
                                     session['device'] = devices['CPU']['proc']
                                     msg += f"XPU not supported by the Torch installed!<br/>Read {default_gpu_wiki}<br/>Switching to CPU"
-                            if session['tts_engine'] == TTS_ENGINES['BARK']:
-                                if session['free_vram_gb'] < 12.0:
-                                    os.environ['SUNO_OFFLOAD_CPU'] = "True"
-                                    os.environ['SUNO_USE_SMALL_MODELS'] = "True"
-                                    msg_extra += f"<br/>Switching BARK to SMALL models"  
-                                else:
-                                    os.environ['SUNO_OFFLOAD_CPU'] = "False"
-                                    os.environ['SUNO_USE_SMALL_MODELS'] = "False"
                             if msg == '':
                                 msg = f"Using {session['device'].upper()}"
                             msg += msg_extra;
