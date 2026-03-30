@@ -13,7 +13,7 @@ import subprocess
 import queue
 import streamlit as st
 from pathlib import Path
-
+import helper as _helpers
 # ─── ensure project root is importable ─────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -40,25 +40,27 @@ st.set_page_config(
 )
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
-# ─── Helpers ───────────────────────────────────────────────────────────────
-
-def _prog_version() -> str:
-    vfile = PROJECT_ROOT / "VERSION.txt"
-    return vfile.read_text().strip() if vfile.exists() else "dev"
-
-VERSION = _prog_version()
+VERSION = _helpers._prog_version()
 
 def _get_language_options():
-    return [
-        (
-            f"{d['name']} — {d['native_name']}" if d['name'] != d['native_name'] else d['name'],
-            code
-        )
-        for code, d in language_mapping.items()
-    ]
+    options = []
+    for code, lang in language_mapping.items():
+        display = lang["name"]
+        
+        if lang["name"] != lang["native_name"]:
+            display += " — " + lang["native_name"]
+
+        options.append((display, code))
+
+    return options
 
 def _get_device_options():
-    return [(k, v['proc']) for k, v in devices.items()]
+    options = []
+
+    for key, value in devices.items():
+        processor = value["proc"]
+        options.append((key, processor))
+    return options
 
 def _get_tts_engine_options(language: str):
     """Return TTS engines that support the given language."""
@@ -71,16 +73,16 @@ def _get_tts_engine_options(language: str):
     return compatible if compatible else [(k, v) for k, v in TTS_ENGINES.items()]
 
 def _get_voice_list(language: str):
-    """Return built-in voice names for the given language from the voices/ dir."""
-    voices_dir = PROJECT_ROOT / "voices" / language
-    if not voices_dir.exists():
-        return []
     voices = []
-    for d in sorted(voices_dir.iterdir()):
-        if d.is_dir():
-            for f in d.iterdir():
-                if f.suffix.lower() == ".wav":
-                    voices.append((f.name, str(f)))
+    voices_dir = PROJECT_ROOT / "voices" / language
+
+    if not voices_dir.exists():
+        return voices
+
+    for path in voices_dir.rglob("*.wav"):
+        voices.append((path.name, str(path)))
+
+    # print("Found", len(voices), "voices for", language)
     return voices
 
 def _detect_gpu() -> list[str]:
@@ -145,7 +147,7 @@ st.markdown(f"""
       Convert eBooks to Audiobooks &nbsp;|&nbsp; {lang_badges} &nbsp;|&nbsp; {hw_badge}
     </div>
   </div>
-  <div class="version-badge">v&nbsp;{VERSION}</div>
+  <div class="version-badge">version :&nbsp;{VERSION}</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -159,17 +161,24 @@ with st.sidebar:
     lang_opts = _get_language_options()
     lang_labels = [l for l, _ in lang_opts]
     lang_values = [v for _, v in lang_opts]
-    default_lang_idx = lang_values.index(default_language_code) if default_language_code in lang_values else 0
+
+    if default_language_code in lang_values:
+        default_lang_idx = lang_values.index(default_language_code)
+    else:
+        default_lang_idx = 0
+
     language_label = st.selectbox("🌐 Language", lang_labels, index=default_lang_idx, key="lang_label")
     language = lang_values[lang_labels.index(language_label)]
 
     # Device
     device_opts = _get_device_options()
+    
     # put GPU first if available
     if gpu_tags:
         gpu_first = [d for d in device_opts if any(g in d[1].lower() for g in gpu_tags)]
         cpu_opts  = [d for d in device_opts if not any(g in d[1].lower() for g in gpu_tags)]
         device_opts = gpu_first + cpu_opts
+
     dev_labels = [k for k, _ in device_opts]
     dev_values = [v for _, v in device_opts]
     device_label = st.selectbox("🖥️ Processor", dev_labels, index=0, key="device_label")
@@ -329,7 +338,6 @@ with tab_convert:
         convert_disabled = is_running or (
             ebook_mode == "Single File" and not st.session_state.get("ebook_upload")
         )
-
         col_btn_a, col_btn_b = st.columns(2)
         with col_btn_a:
             convert_clicked = st.button(
@@ -483,8 +491,10 @@ def _run_conversion(args: dict, log_q: queue.Queue, done_event: threading.Event)
             done_event.set()
 
 
-if "log_q"      not in st.session_state: st.session_state.log_q      = None
-if "done_event" not in st.session_state: st.session_state.done_event = None
+if "log_q" not in st.session_state:
+    st.session_state.log_q = None
+if "done_event" not in st.session_state: 
+    st.session_state.done_event = None
 
 # Handle Convert click
 if convert_clicked and not is_running:
@@ -529,7 +539,7 @@ if convert_clicked and not is_running:
             "xtts_enable_text_splitting": xtts_text_split,
 
         }
-
+        print(f"Starting conversion with args: {args}")
         lq = queue.Queue()
         de = threading.Event()
         st.session_state.log_q      = lq

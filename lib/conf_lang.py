@@ -1,18 +1,5 @@
 import os
 
-install_info = r'''
-After the first run, you are free to use your command line with:
-# go into Voxlibir folder then:
-----------------------------------
-conda activate ./python_env
-python app.py [options]
-conda deactivate
-----------------------------------
-Available command options, type:
-# or if conda ./python_env activated:
-python app.py --help
-'''
-
 default_language_code = 'eng' # ISO-639-3
 
 year_to_decades_languages = ['eng']

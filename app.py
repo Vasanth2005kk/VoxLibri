@@ -4,9 +4,10 @@ import os
 from lib import (
     # from conf.py
     min_python_version, max_python_version, interface_port, interface_host, NATIVE,
-    # from conf_lang.py
+    # from helper.py
     install_info
 )
+
 
 warnings.filterwarnings('ignore', category=SyntaxWarning)
 warnings.filterwarnings('ignore', category=UserWarning)
